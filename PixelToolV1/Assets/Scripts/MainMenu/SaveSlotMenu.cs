@@ -14,15 +14,18 @@ public class SaveSlotMenu : MonoBehaviour
 
     private void Awake()
     {
-        saveSlots = GetComponentsInChildren<SaveSlot>();
+        saveSlots = this.GetComponentsInChildren<SaveSlot>();
     }
-
- 
 
     public void OnBackClicked()
     {
         menu.ActivateMenu();
         this.DeactivateMenu();
+    }
+
+    private void Start()
+    {
+        ActivateMenu();
     }
 
     public void OnSaveSlotClicked(SaveSlot _saveSlot)

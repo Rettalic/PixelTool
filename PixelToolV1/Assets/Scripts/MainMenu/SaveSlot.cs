@@ -11,6 +11,7 @@ public class SaveSlot : MonoBehaviour
     [Header("Profile")]
     [SerializeField] private string profileID = "";
 
+    [Header("Content")]
     [SerializeField] private GameObject noDataContent;
     [SerializeField] private GameObject hasDataContent;
 
@@ -22,7 +23,7 @@ public class SaveSlot : MonoBehaviour
 
     private void Awake()
     {
-        
+        SetData(null);
     }
 
     public void SetData(ToolData _data)
@@ -37,7 +38,7 @@ public class SaveSlot : MonoBehaviour
             noDataContent.SetActive(false);
             hasDataContent.SetActive(true);
 
-            projectName.text = _data.GetProjectName();
+            projectName.text = _data.GetProjectName() + "YEET";
         }
     }
 

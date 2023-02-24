@@ -17,6 +17,7 @@ public class ToolData
     {
         this.deathCount = 0;
         playerPosition = Vector3.zero;
+        projectName = "";
     }
 
     public string GetProjectName() 

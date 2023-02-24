@@ -36,21 +36,20 @@ public class SaveSlotsMenu : Menu
         }
         else if (_saveSlot.hasData) // case - new game, but the save slot has data
         {
-            confirmationPopupMenu.ActivateMenu(
-                "Starting a New Game with this slot will override the currently saved data. Are you sure?",
-                // function to execute if we select 'yes'
+            confirmationPopupMenu.ActivateMenu("Starting a new Tool with this slot will override the currently saved data. Are you sure?",
+                // 'yes'
                 () => {
                     DataPersistenceManager.instance.ChangeSelectedProfileId(_saveSlot.GetProfileId());
                     DataPersistenceManager.instance.NewTool();
                     SaveToolAndLoadScene();
                 },
-                // function to execute if we select 'cancel'
+                // 'cancel'
                 () => {
                     this.ActivateMenu(isLoadingTool);
                 }
             );
         }
-        else // case - new game, and the save slot has no data
+        else // case - new tool, and the save slot has no data
         {
             DataPersistenceManager.instance.ChangeSelectedProfileId(_saveSlot.GetProfileId());
             DataPersistenceManager.instance.NewTool();

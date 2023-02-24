@@ -4,52 +4,67 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class MainMenu : MonoBehaviour
+public class MainMenu : Menu
 {
+    [Header("Menu Navigation")]
+    [SerializeField] private SaveSlotsMenu saveSlotsMenu;
+
     [Header("Menu Buttons")]
-    [SerializeField] private Button newProjectButton;
-    [SerializeField] private Button loadProjectButton;
-
-    public SaveSlotMenu saveslotMenu;
-
+    [SerializeField] private Button newToolButton;
+    [SerializeField] private Button continueToolButton;
+    [SerializeField] private Button loadToolButton;
 
     public int sceneIndex;
 
-    private void Start()
+    private void Start() 
     {
-        if(!DataPersistanceManager.Instance.HasToolData())
-        {
-            loadProjectButton.interactable = false;
-        }    
+        DisableButtonsDependingOnData();
     }
 
-    public void OnNewProjectClicked()
+    private void DisableButtonsDependingOnData() 
     {
-        saveslotMenu.ActivateMenu();
+        if (!DataPersistenceManager.instance.HasGameData()) 
+        {
+            continueToolButton.interactable = false;
+            loadToolButton.interactable = false;
+        }
+    }
+
+    public void OnNewGameClicked() 
+    {
+        saveSlotsMenu.ActivateMenu(false);
         this.DeactivateMenu();
     }
 
-    public void OnContinueProjectClicked()
+    public void OnLoadGameClicked() 
+    {
+        saveSlotsMenu.ActivateMenu(true);
+        this.DeactivateMenu();
+    }
+
+    public void OnContinueGameClicked() 
     {
         DisableMenuButtons();
+        // save the game anytime before loading a new scene
+        DataPersistenceManager.instance.SaveGame();
+        // load the next scene - which will in turn load the game because of 
+        // OnSceneLoaded() in the DataPersistenceManager
         SceneManager.LoadSceneAsync(sceneIndex);
     }
 
-    private void DisableMenuButtons()
+    private void DisableMenuButtons() 
     {
-        newProjectButton.interactable = false;
-        loadProjectButton.interactable= false;
+        loadToolButton.interactable = false;
+        continueToolButton.interactable = false;
     }
 
-
-    public void ActivateMenu()
+    public void ActivateMenu() 
     {
         this.gameObject.SetActive(true);
-
-        Dictionary<string, ToolData> profilesToolData = DataPersistanceManager.Instance.GetAllProfilesToolData();
-        
+        DisableButtonsDependingOnData();
     }
-    public void DeactivateMenu()
+
+    public void DeactivateMenu() 
     {
         this.gameObject.SetActive(false);
     }

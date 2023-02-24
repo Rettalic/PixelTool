@@ -4,48 +4,60 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-
 public class SaveSlot : MonoBehaviour
 {
-
     [Header("Profile")]
-    [SerializeField] private string profileID = "";
+    [SerializeField] private string profileId = "";
 
     [Header("Content")]
     [SerializeField] private GameObject noDataContent;
     [SerializeField] private GameObject hasDataContent;
+    [SerializeField] private TextMeshProUGUI percentageCompleteText;
+    [SerializeField] private TextMeshProUGUI deathCountText;
 
+    [Header("Clear Data Button")]
     [SerializeField] private Button clearButton;
-    [SerializeField] private TextMeshProUGUI projectName;
 
     public bool hasData { get; private set; } = false;
+
     private Button saveSlotButton;
 
-    private void Awake()
+    private void Awake() 
     {
-        SetData(null);
+        saveSlotButton = this.GetComponent<Button>();
     }
 
-    public void SetData(ToolData _data)
+    public void SetData(ToolData data) 
     {
-        if(_data == null)
+        // there's no data for this profileId
+        if (data == null) 
         {
+            hasData = false;
             noDataContent.SetActive(true);
             hasDataContent.SetActive(false);
+            clearButton.gameObject.SetActive(false);
         }
-        else
+        // there is data for this profileId
+        else 
         {
+            hasData = true;
             noDataContent.SetActive(false);
             hasDataContent.SetActive(true);
+            clearButton.gameObject.SetActive(true);
 
-            projectName.text = _data.GetProjectName() + "YEET";
+            percentageCompleteText.text = data.GetPercentageComplete() + "% COMPLETE";
+            deathCountText.text = "DEATH COUNT: " + data.deathCount;
         }
     }
 
-
-
-    public string GetProfileID()
+    public string GetProfileId() 
     {
-        return this.profileID;
+        return this.profileId;
+    }
+
+    public void SetInteractable(bool interactable)
+    {
+        saveSlotButton.interactable = interactable;
+        clearButton.interactable = interactable;
     }
 }

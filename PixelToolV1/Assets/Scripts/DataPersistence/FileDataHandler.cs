@@ -6,29 +6,30 @@ using System.IO;
 
 public class FileDataHandler
 {
-    private string dataDirPath = "";
+    private string dataDirPath  = "";
     private string dataFileName = "";
-    private bool useEncryption = false;
-    private readonly string encryptionCodeWord = "word";
-    private readonly string backupExtension = ".bak";
+    private bool   useEncryption = false;
 
-    public FileDataHandler(string dataDirPath, string dataFileName, bool useEncryption) 
+    private readonly string encryptionCodeWord = "ToolEncryptionWord";
+    private readonly string backupExtension    = ".bak";
+
+    public FileDataHandler(string _dataDirPath, string _dataFileName, bool _useEncryption) 
     {
-        this.dataDirPath = dataDirPath;
-        this.dataFileName = dataFileName;
-        this.useEncryption = useEncryption;
+        this.dataDirPath   = _dataDirPath;
+        this.dataFileName  = _dataFileName;
+        this.useEncryption = _useEncryption;
     }
 
-    public ToolData Load(string profileId, bool allowRestoreFromBackup = true) 
+    public ToolData Load(string _profileID, bool _allowRestoreFromBackup = true) 
     {
         // base case - if the profileId is null, return right away
-        if (profileId == null) 
+        if (_profileID == null) 
         {
             return null;
         }
 
         // use Path.Combine to account for different OS's having different path separators
-        string fullPath = Path.Combine(dataDirPath, profileId, dataFileName);
+        string fullPath = Path.Combine(dataDirPath, _profileID, dataFileName);
         ToolData loadedData = null;
         if (File.Exists(fullPath)) 
         {
@@ -58,24 +59,23 @@ public class FileDataHandler
                 // since we're calling Load(..) recursively, we need to account for the case where
                 // the rollback succeeds, but data is still failing to load for some other reason,
                 // which without this check may cause an infinite recursion loop.
-                if (allowRestoreFromBackup) 
+                if (_allowRestoreFromBackup) 
                 {
                     Debug.LogWarning("Failed to load data file. Attempting to roll back.\n" + e);
                     bool rollbackSuccess = AttemptRollback(fullPath);
                     if (rollbackSuccess)
                     {
                         // try to load again recursively
-                        loadedData = Load(profileId, false);
+                        loadedData = Load(_profileID, false);
                     }
                 }
-                // if we hit this else block, one possibility is that the backup file is also corrupt
-                else 
+                else  // if we hit this else block, one possibility is that the backup file is also corrupt
                 {
-                    Debug.LogError("Error occured when trying to load file at path: " 
-                        + fullPath  + " and backup did not work.\n" + e);
+                    Debug.LogError("Error occured when trying to load file at path: " + fullPath  + " and backup did not work.\n" + e);
                 }
             }
         }
+
         return loadedData;
     }
 
@@ -120,8 +120,7 @@ public class FileDataHandler
             {
                 File.Copy(fullPath, backupFilePath, true);
             }
-            // otherwise, something went wrong and we should throw an exception
-            else 
+            else // otherwise, something went wrong and we should throw an exception
             {
                 throw new Exception("Save file could not be verified and backup could not be created.");
             }
@@ -133,15 +132,15 @@ public class FileDataHandler
         }
     }
 
-    public void Delete(string profileId) 
+    public void Delete(string _profileID) 
     {
         // base case - if the profileId is null, return right away
-        if (profileId == null) 
+        if (_profileID == null) 
         {
             return;
         }
 
-        string fullPath = Path.Combine(dataDirPath, profileId, dataFileName);
+        string fullPath = Path.Combine(dataDirPath, _profileID, dataFileName);
         try 
         {
             // ensure the data file exists at this path before deleting the directory
@@ -157,8 +156,7 @@ public class FileDataHandler
         }
         catch (Exception e) 
         {
-            Debug.LogError("Failed to delete profile data for profileId: " 
-                + profileId + " at path: " + fullPath + "\n" + e);
+            Debug.LogError("Failed to delete profile data for profileId: " + _profileID + " at path: " + fullPath + "\n" + e);
         }
     }
 
@@ -199,7 +197,7 @@ public class FileDataHandler
         return profileDictionary;
     }
 
-    public string GetMostRecentlyUpdatedProfileId() 
+    public string GetMostRecentlyUpdatedProfileID() 
     {
         string mostRecentProfileId = null;
 
@@ -232,16 +230,17 @@ public class FileDataHandler
                 }
             }
         }
+
         return mostRecentProfileId;
     }
 
     // the below is a simple implementation of XOR encryption
-    private string EncryptDecrypt(string data) 
+    private string EncryptDecrypt(string _data) 
     {
         string modifiedData = "";
-        for (int i = 0; i < data.Length; i++) 
+        for (int i = 0; i < _data.Length; i++) 
         {
-            modifiedData += (char) (data[i] ^ encryptionCodeWord[i % encryptionCodeWord.Length]);
+            modifiedData += (char) (_data[i] ^ encryptionCodeWord[i % encryptionCodeWord.Length]);
         }
         return modifiedData;
     }
@@ -267,8 +266,7 @@ public class FileDataHandler
         }
         catch (Exception e) 
         {
-            Debug.LogError("Error occured when trying to roll back to backup file at: " 
-                + backupFilePath + "\n" + e);
+            Debug.LogError("Error occured when trying to roll back to backup file at: " + backupFilePath + "\n" + e);
         }
 
         return success;

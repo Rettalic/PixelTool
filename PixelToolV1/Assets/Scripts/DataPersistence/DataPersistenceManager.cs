@@ -100,7 +100,7 @@ public class DataPersistenceManager : MonoBehaviour
 
     private void InitializeSelectedProfileId() 
     {
-        this.selectedProfileID = dataHandler.GetMostRecentlyUpdatedProfileId();
+        this.selectedProfileID = dataHandler.GetMostRecentlyUpdatedProfileID();
         if (overrideSelectedProfileID) 
         {
             this.selectedProfileID = testSelectedProfileID;

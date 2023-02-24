@@ -9,8 +9,8 @@ public class DataPersistenceManager : MonoBehaviour
     [Header("Debugging")]
     [SerializeField] private bool   disableDataPersistence    = false;
     [SerializeField] private bool   initializeDataIfNull      = false;
-    [SerializeField] private bool   overrideSelectedProfileId = false;
-    [SerializeField] private string testSelectedProfileId     = "test";
+    [SerializeField] private bool   overrideSelectedProfileID = false;
+    [SerializeField] private string testSelectedProfileID     = "test";
 
     [Header("File Storage Config")]
     [SerializeField] private string fileName;
@@ -23,7 +23,7 @@ public class DataPersistenceManager : MonoBehaviour
     private List<IDataPersistence> dataPersistenceObjects;
     private FileDataHandler dataHandler;
 
-    private string selectedProfileId = "";
+    private string selectedProfileID = "";
 
     private Coroutine autoSaveCoroutine;
 
@@ -31,7 +31,7 @@ public class DataPersistenceManager : MonoBehaviour
 
     private void Awake() 
     {
-        //Singleton
+        #region Singleton
         if (instance != null) 
         {
             Debug.Log("Found more than one Data Persistence Manager in the scene. Destroying the newest one.");
@@ -40,7 +40,7 @@ public class DataPersistenceManager : MonoBehaviour
         }
         instance = this;
         DontDestroyOnLoad(this.gameObject);
-        //End Singleton
+        #endregion Singleton
 
         if (disableDataPersistence) 
         {
@@ -52,6 +52,7 @@ public class DataPersistenceManager : MonoBehaviour
         InitializeSelectedProfileId();
     }
 
+    #region Sub/Unsub
     //Subscribe 
     private void OnEnable() 
     {
@@ -63,8 +64,9 @@ public class DataPersistenceManager : MonoBehaviour
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
+    #endregion Sub/Unsub
 
-    public void OnSceneLoaded(Scene scene, LoadSceneMode mode) 
+    public void OnSceneLoaded(Scene _scene, LoadSceneMode _mode) 
     {
         this.dataPersistenceObjects = FindAllDataPersistenceObjects();
         LoadProject();
@@ -77,18 +79,19 @@ public class DataPersistenceManager : MonoBehaviour
         autoSaveCoroutine = StartCoroutine(AutoSave());
     }
 
-    public void ChangeSelectedProfileId(string newProfileId) 
+    #region Profile Change/Delete/Initialize
+    public void ChangeSelectedProfileId(string _newProfileID) 
     {
         // update the profile to use for saving and loading
-        this.selectedProfileId = newProfileId;
+        this.selectedProfileID = _newProfileID;
         // load the Tool, which will use that profile, updating our Tool data accordingly
         LoadProject();
     }
 
-    public void DeleteProfileData(string profileId) 
+    public void DeleteProfileData(string _profileID) 
     {
         // delete the data for this profile id
-        dataHandler.Delete(profileId);
+        dataHandler.Delete(_profileID);
         // initialize the selected profile id
         InitializeSelectedProfileId();
         // reload the Tool so that our data matches the newly selected profile id
@@ -97,13 +100,14 @@ public class DataPersistenceManager : MonoBehaviour
 
     private void InitializeSelectedProfileId() 
     {
-        this.selectedProfileId = dataHandler.GetMostRecentlyUpdatedProfileId();
-        if (overrideSelectedProfileId) 
+        this.selectedProfileID = dataHandler.GetMostRecentlyUpdatedProfileId();
+        if (overrideSelectedProfileID) 
         {
-            this.selectedProfileId = testSelectedProfileId;
-            Debug.LogWarning("Overrode selected profile id with test id: " + testSelectedProfileId);
+            this.selectedProfileID = testSelectedProfileID;
+            Debug.LogWarning("Overrode selected profile id with test id: " + testSelectedProfileID);
         }
     }
+    #endregion Profile Change/Delete/Initialize
 
     public void NewTool() 
     {
@@ -119,7 +123,7 @@ public class DataPersistenceManager : MonoBehaviour
         }
 
         // load any saved data from a file using the data handler
-        this.toolData = dataHandler.Load(selectedProfileId);
+        this.toolData = dataHandler.Load(selectedProfileID);
 
         // start a new tool if the data is null and we're configured to initialize data for debugging purposes
         if (this.toolData == null && initializeDataIfNull) 
@@ -166,13 +170,9 @@ public class DataPersistenceManager : MonoBehaviour
         toolData.lastUpdated = System.DateTime.Now.ToBinary();
 
         // save that data to a file using the data handler
-        dataHandler.Save(toolData, selectedProfileId);
+        dataHandler.Save(toolData, selectedProfileID);
     }
 
-    private void OnApplicationQuit() 
-    {
-        SaveTool();
-    }
 
     private List<IDataPersistence> FindAllDataPersistenceObjects() 
     {
@@ -201,5 +201,9 @@ public class DataPersistenceManager : MonoBehaviour
             SaveTool();
             Debug.Log("Auto Saved Tool");
         }
+    }
+    private void OnApplicationQuit() 
+    {
+        SaveTool();
     }
 }

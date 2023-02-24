@@ -7,14 +7,14 @@ using UnityEngine.SceneManagement;
 public class DataPersistenceManager : MonoBehaviour
 {
     [Header("Debugging")]
-    [SerializeField] private bool disableDataPersistence = false;
-    [SerializeField] private bool initializeDataIfNull = false;
-    [SerializeField] private bool overrideSelectedProfileId = false;
-    [SerializeField] private string testSelectedProfileId = "test";
+    [SerializeField] private bool   disableDataPersistence    = false;
+    [SerializeField] private bool   initializeDataIfNull      = false;
+    [SerializeField] private bool   overrideSelectedProfileId = false;
+    [SerializeField] private string testSelectedProfileId     = "test";
 
     [Header("File Storage Config")]
     [SerializeField] private string fileName;
-    [SerializeField] private bool useEncryption;
+    [SerializeField] private bool   useEncryption;
 
     [Header("Auto Saving Configuration")]
     [SerializeField] private float autoSaveTimeSeconds = 60f;
@@ -81,7 +81,7 @@ public class DataPersistenceManager : MonoBehaviour
     {
         // update the profile to use for saving and loading
         this.selectedProfileId = newProfileId;
-        // load the game, which will use that profile, updating our game data accordingly
+        // load the Tool, which will use that profile, updating our Tool data accordingly
         LoadProject();
     }
 
@@ -91,7 +91,7 @@ public class DataPersistenceManager : MonoBehaviour
         dataHandler.Delete(profileId);
         // initialize the selected profile id
         InitializeSelectedProfileId();
-        // reload the game so that our data matches the newly selected profile id
+        // reload the Tool so that our data matches the newly selected profile id
         LoadProject();
     }
 
@@ -105,7 +105,7 @@ public class DataPersistenceManager : MonoBehaviour
         }
     }
 
-    public void NewGame() 
+    public void NewTool() 
     {
         this.toolData = new ToolData();
     }
@@ -121,16 +121,16 @@ public class DataPersistenceManager : MonoBehaviour
         // load any saved data from a file using the data handler
         this.toolData = dataHandler.Load(selectedProfileId);
 
-        // start a new game if the data is null and we're configured to initialize data for debugging purposes
+        // start a new tool if the data is null and we're configured to initialize data for debugging purposes
         if (this.toolData == null && initializeDataIfNull) 
         {
-            NewGame();
+            NewTool();
         }
 
         // if no data can be loaded, don't continue
         if (this.toolData == null) 
         {
-            Debug.Log("No data was found. A New Game needs to be started before data can be loaded.");
+            Debug.Log("No data was found. A New Tool needs to be started before data can be loaded.");
             return;
         }
 
@@ -141,7 +141,7 @@ public class DataPersistenceManager : MonoBehaviour
         }
     }
 
-    public void SaveGame()
+    public void SaveTool()
     {
         // return right away if data persistence is disabled
         if (disableDataPersistence) 
@@ -152,7 +152,7 @@ public class DataPersistenceManager : MonoBehaviour
         // if we don't have any data to save, log a warning here
         if (this.toolData == null) 
         {
-            Debug.LogWarning("No data was found. A New Game needs to be started before data can be saved.");
+            Debug.LogWarning("No data was found. A New tool needs to be started before data can be saved.");
             return;
         }
 
@@ -171,7 +171,7 @@ public class DataPersistenceManager : MonoBehaviour
 
     private void OnApplicationQuit() 
     {
-        SaveGame();
+        SaveTool();
     }
 
     private List<IDataPersistence> FindAllDataPersistenceObjects() 
@@ -198,8 +198,8 @@ public class DataPersistenceManager : MonoBehaviour
         while (true) 
         {
             yield return new WaitForSeconds(autoSaveTimeSeconds);
-            SaveGame();
-            Debug.Log("Auto Saved Game");
+            SaveTool();
+            Debug.Log("Auto Saved Tool");
         }
     }
 }

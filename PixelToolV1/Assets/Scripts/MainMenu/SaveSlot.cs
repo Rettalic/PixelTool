@@ -12,8 +12,7 @@ public class SaveSlot : MonoBehaviour
     [Header("Content")]
     [SerializeField] private GameObject noDataContent;
     [SerializeField] private GameObject hasDataContent;
-    [SerializeField] private TextMeshProUGUI percentageCompleteText;
-    [SerializeField] private TextMeshProUGUI deathCountText;
+    [SerializeField] private TextMeshProUGUI projectName;
 
     [Header("Clear Data Button")]
     [SerializeField] private Button clearButton;
@@ -29,24 +28,22 @@ public class SaveSlot : MonoBehaviour
 
     public void SetData(ToolData data) 
     {
-        // there's no data for this profileId
-        if (data == null) 
+       
+        if (data == null)  // there's no data for this profileId
         {
             hasData = false;
             noDataContent.SetActive(true);
             hasDataContent.SetActive(false);
             clearButton.gameObject.SetActive(false);
         }
-        // there is data for this profileId
-        else 
+        else             // there is data for this profileId
         {
             hasData = true;
             noDataContent.SetActive(false);
             hasDataContent.SetActive(true);
             clearButton.gameObject.SetActive(true);
 
-            percentageCompleteText.text = data.GetPercentageComplete() + "% COMPLETE";
-            deathCountText.text = "DEATH COUNT: " + data.deathCount;
+            projectName.text = data.GetProjectName();
         }
     }
 

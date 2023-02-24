@@ -4,15 +4,10 @@ using UnityEngine;
 
 public class CreateNewSaveSlot : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private GameObject saveSlotPrefab;
+    
+    public void AddNewSave()
     {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Coin : MonoBehaviour, IDataPersistence
-{
+public class Coin : MonoBehaviour//, IDataPersistence
+{/*
     [SerializeField] private string id;
 
     [ContextMenu("Generate guid for id")]
@@ -55,6 +55,6 @@ public class Coin : MonoBehaviour, IDataPersistence
         collected = true;
         visual.gameObject.SetActive(false);
         GameEventsManager.instance.CoinCollected();
-    }
+    }*/
 
 }

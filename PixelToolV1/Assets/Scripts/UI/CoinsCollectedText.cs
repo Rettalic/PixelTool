@@ -19,18 +19,18 @@ public class CoinsCollectedText : MonoBehaviour, IDataPersistence
     private void Start() 
     {
         // subscribe to events
-        GameEventsManager.instance.onCoinCollected += OnCoinCollected;
+       // GameEventsManager.instance.onCoinCollected += OnCoinCollected;
     }
 
     public void LoadData(ToolData data) 
     {
-        foreach(KeyValuePair<string, bool> pair in data.coinsCollected) 
+        /*foreach(KeyValuePair<string, bool> pair in data.coinsCollected) 
         {
             if (pair.Value) 
             {
                 coinsCollected++;
             }
-        }
+        }*/
     }
 
     public void SaveData(ToolData data)

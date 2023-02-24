@@ -17,7 +17,7 @@ public class SaveSlotsMenu : Menu
 
     private SaveSlot[] saveSlots;
 
-    private bool isLoadingGame = false;
+    private bool isLoadingTool = false;
 
     private void Awake() 
     {
@@ -29,42 +29,39 @@ public class SaveSlotsMenu : Menu
         // disable all buttons
         DisableMenuButtons();
 
-        // case - loading game
-        if (isLoadingGame) 
+        if (isLoadingTool) // case - loading game
         {
             DataPersistenceManager.instance.ChangeSelectedProfileId(_saveSlot.GetProfileId());
-            SaveGameAndLoadScene();
+            SaveToolAndLoadScene();
         }
-        // case - new game, but the save slot has data
-        else if (_saveSlot.hasData) 
+        else if (_saveSlot.hasData) // case - new game, but the save slot has data
         {
             confirmationPopupMenu.ActivateMenu(
                 "Starting a New Game with this slot will override the currently saved data. Are you sure?",
                 // function to execute if we select 'yes'
                 () => {
                     DataPersistenceManager.instance.ChangeSelectedProfileId(_saveSlot.GetProfileId());
-                    DataPersistenceManager.instance.NewGame();
-                    SaveGameAndLoadScene();
+                    DataPersistenceManager.instance.NewTool();
+                    SaveToolAndLoadScene();
                 },
                 // function to execute if we select 'cancel'
                 () => {
-                    this.ActivateMenu(isLoadingGame);
+                    this.ActivateMenu(isLoadingTool);
                 }
             );
         }
-        // case - new game, and the save slot has no data
-        else 
+        else // case - new game, and the save slot has no data
         {
             DataPersistenceManager.instance.ChangeSelectedProfileId(_saveSlot.GetProfileId());
-            DataPersistenceManager.instance.NewGame();
-            SaveGameAndLoadScene();
+            DataPersistenceManager.instance.NewTool();
+            SaveToolAndLoadScene();
         }
     }
 
-    private void SaveGameAndLoadScene() 
+    private void SaveToolAndLoadScene() 
     {
         // save the game anytime before loading a new scene
-        DataPersistenceManager.instance.SaveGame();
+        DataPersistenceManager.instance.SaveTool();
         // load the scene
         SceneManager.LoadSceneAsync("SampleScene");
     }
@@ -78,11 +75,11 @@ public class SaveSlotsMenu : Menu
             // function to execute if we select 'yes'
             () => {
                 DataPersistenceManager.instance.DeleteProfileData(saveSlot.GetProfileId());
-                ActivateMenu(isLoadingGame);
+                ActivateMenu(isLoadingTool);
             },
             // function to execute if we select 'cancel'
             () => {
-                ActivateMenu(isLoadingGame);
+                ActivateMenu(isLoadingTool);
             }
         );
     }
@@ -99,7 +96,7 @@ public class SaveSlotsMenu : Menu
         this.gameObject.SetActive(true);
 
         // set mode
-        this.isLoadingGame = isLoadingGame;
+        this.isLoadingTool = isLoadingGame;
 
         // load all of the profiles that exist
         Dictionary<string, ToolData> profilesGameData = DataPersistenceManager.instance.GetAllProfilesToolData();

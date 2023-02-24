@@ -46,7 +46,7 @@ public class MainMenu : Menu
     {
         DisableMenuButtons();
         // save the game anytime before loading a new scene
-        DataPersistenceManager.instance.SaveGame();
+        DataPersistenceManager.instance.SaveTool();
         // load the next scene - which will in turn load the game because of 
         // OnSceneLoaded() in the DataPersistenceManager
         SceneManager.LoadSceneAsync(sceneIndex);

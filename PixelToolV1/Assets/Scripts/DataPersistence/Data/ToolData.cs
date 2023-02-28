@@ -5,19 +5,20 @@ using UnityEngine;
 [System.Serializable]
 public class ToolData
 {
+    //Data not for us
     public long lastUpdated;
-    public int deathCount;
-    public Vector3 playerPosition;
-       
+
+    //Data for us
+    //Variables per project
     public string projectName;
+    public int pixelateAmount;
 
     // the values defined in this constructor will be the default values
-    // the game starts with when there's no data to load
+    // the tool starts with when there's no data to load
     public ToolData() 
     {
-        this.deathCount = 0;
-        playerPosition = Vector3.zero;
         projectName = "";
+        pixelateAmount = 0;
     }
 
     public string GetProjectName() 

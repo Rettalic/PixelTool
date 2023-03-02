@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 
 public class ToolSettings : MonoBehaviour, ICommand, IDataPersistence
-{
+{ 
     public int pixelateAmount;
     public TMP_Text text;
 

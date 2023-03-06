@@ -5,10 +5,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using System.IO;
 
-public class FileBrowserUpdate : MonoBehaviour
+public class FileBrowserUpdate : MonoBehaviour, IDataPersistence
 {
     public RawImage rawImage;
+    public RawImage rawImage2;
+    public byte[] imgData;
 
     public void OpenFileBrowser()
     {
@@ -19,11 +22,11 @@ public class FileBrowserUpdate : MonoBehaviour
         new FileBrowser().OpenFileBrowser(bp, path =>
         {
             //Load image from local path with UWR
-            StartCoroutine(LoadImage(path));
+            StartCoroutine(LoadImage1(path));
         });
     }
 
-    IEnumerator LoadImage(string path)
+    private IEnumerator LoadImage1(string path)
     {
         using (UnityWebRequest uwr = UnityWebRequestTexture.GetTexture(path))
         {
@@ -37,9 +40,28 @@ public class FileBrowserUpdate : MonoBehaviour
             {
                 var uwrTexture = DownloadHandlerTexture.GetContent(uwr);
                 rawImage.texture = uwrTexture;
+                imgData = uwrTexture.EncodeToPNG();
             }
         }
     }
 
-  
+    public void LoadImage()
+    {
+        Texture2D tex = new Texture2D(2, 2);
+        if (imgData != null)
+        {
+            tex.LoadImage(imgData);
+            rawImage2.texture = tex;
+        }
+    }
+
+    public void LoadData(ToolData _data)
+    {
+        imgData = _data.imgBytes;
+    }
+
+    public void SaveData(ToolData _data)
+    {
+        _data.imgBytes = imgData;
+    }
 }

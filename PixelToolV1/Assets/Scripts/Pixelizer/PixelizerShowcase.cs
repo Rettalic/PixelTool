@@ -1,15 +1,24 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class PixelateEffect : MonoBehaviour
+public class PixelizerShowcase : MonoBehaviour
 {
+    [SerializeField] private Material mat;
+    [SerializeField] private Texture texture;
+    [SerializeField] private int pixelSize;
+    private Pixelizer pixelizer;
+
     public Slider slider;
     public TMP_Text text;
-    public Material pixelateMaterial;
-    public float pixelSize = 10;
+
+    private void Awake()   
+    {
+        pixelizer = new Pixelizer();
+    }
 
     private void Start()
     {
@@ -17,16 +26,14 @@ public class PixelateEffect : MonoBehaviour
         slider.onValueChanged.AddListener(UpdateText);
     }
 
-    public void Pixelate()
+    void Update()
     {
-        pixelateMaterial.SetFloat("_PixelSize", pixelSize);
     }
 
     private void UpdateText(float _val)
     {
+        mat.SetTexture("_MainTex", pixelizer.Pixelize(texture, pixelSize));
         text.text = slider.value.ToString("0,00");
         pixelSize = (int)_val;
-        Pixelate();
     }
- 
 }

@@ -3,19 +3,19 @@
   <Class Name="ToolData">
     <Position X="17.75" Y="5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAIAAAAAAAIAAAAAQAAAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAIAAAAAAAIAAAAAQAAAAgAIAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\DataPersistence\Data\ToolData.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DataPersistenceManager">
-    <Position X="19.5" Y="2" Width="1.5" />
+    <Position X="19.5" Y="2" Width="2.75" />
     <TypeIdentifier>
       <HashCode>IBAQABAAABgAAAACABAgAAAgIEBAAAIJEGAgKAAACEA=</HashCode>
       <FileName>Assets\Scripts\DataPersistence\DataPersistenceManager.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="FileDataHandler">
-    <Position X="23" Y="2" Width="1.5" />
+    <Position X="25.75" Y="2" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAgKIAAAgAAABEAEAAAAAAAAEAIEAAAAAAAAAAACA=</HashCode>
       <FileName>Assets\Scripts\DataPersistence\FileDataHandler.cs</FileName>
@@ -72,7 +72,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="SetProjectName" BaseTypeListCollapsed="true">
-    <Position X="21.25" Y="2" Width="1.5" />
+    <Position X="23" Y="2" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAMAAAQAAAAAAAAAAgQAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\MainMenu\SetProjectName.cs</FileName>
